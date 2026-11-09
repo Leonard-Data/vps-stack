@@ -4,7 +4,7 @@
   "meta": {
     "title": "vps-stack — infrastructure modules and what they depend on",
     "subtitle": "Ten ordered modules, one .env, four orderings that actually matter",
-    "output": "docs/architecture.html",
+    "output": "docs/index.html",
     "quality_profile": "showcase",
     "repository": {
       "url": "https://github.com/Leonard-Data/vps-stack",
