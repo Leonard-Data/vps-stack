@@ -39,10 +39,19 @@ jobs:
       - name: compose files are valid
         run: |
           set -euo pipefail
+          # Each app's env file is rendered at install time and is git-ignored,
+          # so give the parser an empty one here; the point is that Compose
+          # accepts the structure, not that CI knows the secrets.
+          tmp="$(mktemp -d)"
           for d in apps/*/; do
-            docker compose -f "$d/docker-compose.yml" config --quiet \
+            name="$(basename "$d")"
+            mkdir -p "$tmp/$name"
+            cp "$d/docker-compose.yml" "$tmp/$name/"
+            : > "$tmp/$name/.env"
+            docker compose -f "$tmp/$name/docker-compose.yml" config --quiet \
               || { echo "invalid: $d" >&2; exit 1; }
           done
+          echo "all compose files valid"
         env:
           # Compose interpolates these; the real values come from the rendered
           # per-app env files at install time.
