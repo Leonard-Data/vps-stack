@@ -1,0 +1,490 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "vps-stack — infrastructure modules and what they depend on",
+    "subtitle": "Ten ordered modules, one .env, four orderings that actually matter",
+    "output": "docs/architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/Leonard-Data/vps-stack",
+      "provider": "github",
+      "revision": "f314730f60ff34c05b9b60de2aca553ae0872e0a"
+    }
+  },
+  "components": [
+    {
+      "id": "secrets",
+      "type": "database",
+      "label": "root .env",
+      "sublabel": "600 · git-ignored",
+      "pos": [
+        30,
+        40
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": ".env.example",
+          "line": 1,
+          "end_line": 12,
+          "label": "single source of truth"
+        }
+      ]
+    },
+    {
+      "id": "renderer",
+      "type": "backend",
+      "label": "render-env.mjs",
+      "sublabel": "check · apps · dsh-patch",
+      "pos": [
+        280,
+        40
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/render-env.mjs",
+          "line": 62,
+          "end_line": 80,
+          "label": "render fails on empty key"
+        }
+      ]
+    },
+    {
+      "id": "artifacts",
+      "type": "database",
+      "label": "rendered artifacts",
+      "sublabel": "env ×3 · ov.conf · patch",
+      "pos": [
+        540,
+        40
+      ],
+      "size": [
+        172,
+        64
+      ],
+      "sources": [
+        {
+          "path": "scripts/render-env.mjs",
+          "line": 99,
+          "end_line": 118,
+          "label": "targets, mode 600"
+        }
+      ]
+    },
+    {
+      "id": "operator",
+      "type": "external",
+      "label": "Operator",
+      "sublabel": "ssh root@host",
+      "pos": [
+        30,
+        370
+      ],
+      "size": [
+        152,
+        64
+      ]
+    },
+    {
+      "id": "install",
+      "type": "backend",
+      "label": "install.sh",
+      "sublabel": "10 ordered modules",
+      "pos": [
+        280,
+        370
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "install.sh",
+          "line": 35,
+          "end_line": 46,
+          "label": "module list, in order"
+        }
+      ]
+    },
+    {
+      "id": "base",
+      "type": "backend",
+      "label": "00 base",
+      "sublabel": "apt · gh · git identity",
+      "pos": [
+        540,
+        370
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/00-base.sh",
+          "line": 15,
+          "end_line": 24,
+          "label": "package set"
+        }
+      ]
+    },
+    {
+      "id": "tailscale",
+      "type": "cloud",
+      "label": "10 tailscale",
+      "sublabel": "tailnet join",
+      "pos": [
+        780,
+        90
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/10-tailscale.sh",
+          "line": 19,
+          "end_line": 28,
+          "label": "join + record IP"
+        }
+      ]
+    },
+    {
+      "id": "docker",
+      "type": "cloud",
+      "label": "20 docker",
+      "sublabel": "ce + compose plugin",
+      "pos": [
+        540,
+        470
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/20-docker.sh",
+          "line": 12,
+          "end_line": 22,
+          "label": "compose plugin required"
+        }
+      ]
+    },
+    {
+      "id": "node",
+      "type": "backend",
+      "label": "30 node",
+      "sublabel": "/opt/node22 · uv",
+      "pos": [
+        780,
+        330
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/30-node.sh",
+          "line": 26,
+          "end_line": 42,
+          "label": "global CLIs + uv"
+        }
+      ]
+    },
+    {
+      "id": "pi",
+      "type": "backend",
+      "label": "40 pi",
+      "sublabel": "~/.pi/agent",
+      "pos": [
+        780,
+        450
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/40-pi.sh",
+          "line": 11,
+          "end_line": 17,
+          "label": "self-managing install"
+        }
+      ]
+    },
+    {
+      "id": "dsh",
+      "type": "backend",
+      "label": "70 dsh",
+      "sublabel": "profile · systemd",
+      "pos": [
+        1010,
+        330
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/70-dsh.sh",
+          "line": 60,
+          "end_line": 80,
+          "label": "unit binds tailnet IP"
+        }
+      ]
+    },
+    {
+      "id": "firstmate",
+      "type": "backend",
+      "label": "60 firstmate",
+      "sublabel": "tmux backend",
+      "pos": [
+        1010,
+        450
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/60-firstmate.sh",
+          "line": 12,
+          "end_line": 26,
+          "label": "checkout + bootstrap"
+        }
+      ]
+    },
+    {
+      "id": "apps",
+      "type": "cloud",
+      "label": "80 apps",
+      "sublabel": "traefik · 9router · ov",
+      "pos": [
+        1010,
+        690
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/80-apps.sh",
+          "line": 52,
+          "end_line": 64,
+          "label": "traefik first, then apps"
+        }
+      ]
+    },
+    {
+      "id": "herdr",
+      "type": "backend",
+      "label": "50 herdr + Ovis",
+      "sublabel": "herdr plugin",
+      "pos": [
+        1010,
+        150
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/50-herdr-ovis.sh",
+          "line": 11,
+          "end_line": 18,
+          "label": "one installer, three tools"
+        }
+      ]
+    },
+    {
+      "id": "hindsight",
+      "type": "backend",
+      "label": "75 hindsight",
+      "sublabel": "uvx · health timer",
+      "pos": [
+        1010,
+        570
+      ],
+      "size": [
+        152,
+        64
+      ],
+      "sources": [
+        {
+          "path": "modules/75-hindsight.sh",
+          "line": 52,
+          "end_line": 56,
+          "label": "uvx ExecStart"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Ubuntu 24.04 host — root over SSH",
+      "wraps": [
+        "secrets",
+        "renderer",
+        "artifacts",
+        "install",
+        "base",
+        "tailscale",
+        "docker",
+        "node",
+        "pi",
+        "dsh",
+        "firstmate",
+        "apps",
+        "herdr",
+        "hindsight"
+      ],
+      "pad": 24
+    },
+    {
+      "kind": "security-group",
+      "label": "tailnet (WireGuard)",
+      "wraps": [
+        "dsh",
+        "herdr"
+      ],
+      "pad": 16
+    },
+    {
+      "kind": "security-group",
+      "label": "docker: published ports only",
+      "wraps": [
+        "apps"
+      ],
+      "pad": 14
+    }
+  ],
+  "connections": [
+    {
+      "from": "secrets",
+      "to": "renderer",
+      "label": "interpolate"
+    },
+    {
+      "from": "renderer",
+      "to": "artifacts",
+      "label": "write · 600"
+    },
+    {
+      "from": "artifacts",
+      "to": "install",
+      "label": "gates the run",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "operator",
+      "to": "install",
+      "label": "ssh root",
+      "variant": "emphasis"
+    },
+    {
+      "from": "install",
+      "to": "base",
+      "label": "module 00",
+      "variant": "emphasis"
+    },
+    {
+      "from": "base",
+      "to": "tailscale",
+      "label": "module 10"
+    },
+    {
+      "from": "base",
+      "to": "docker",
+      "label": "module 20"
+    },
+    {
+      "from": "base",
+      "to": "node",
+      "label": "module 30"
+    },
+    {
+      "from": "base",
+      "to": "pi",
+      "label": "module 40"
+    },
+    {
+      "from": "tailscale",
+      "to": "herdr",
+      "label": "tailscale serve"
+    },
+    {
+      "from": "node",
+      "to": "dsh",
+      "label": "pnpm"
+    },
+    {
+      "from": "node",
+      "to": "firstmate",
+      "label": "CLIs",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "pi",
+      "to": "firstmate",
+      "label": "hooks"
+    },
+    {
+      "from": "docker",
+      "to": "apps",
+      "label": "compose up"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Only four orderings matter",
+      "items": [
+        "tailscale before dsh: the unit binds the tailnet IP",
+        "tailscale before Ovis: it publishes with tailscale serve",
+        "docker, then traefik, then every other app: traefik owns :80/:443",
+        "node (uv) before hindsight: the unit executes uvx"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "One secret, one place",
+      "items": [
+        "install.sh refuses to run on an incomplete .env",
+        "render-env.mjs substitutes, and an empty value is an error",
+        "Rendered files are git-ignored and written 600",
+        "Rotate: edit .env, then install.sh --only apps --force"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What a human must do",
+      "items": [
+        "pi sign-in; gh auth login with the project scope",
+        "The 9router API key, minted in its UI after first boot",
+        "The OpenViking user key for the dsh memory plugin",
+        "Until then the containers run, calls fail"
+      ]
+    }
+  ]
+}

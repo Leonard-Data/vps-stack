@@ -2,7 +2,7 @@
 # One runnable check for the whole host: every module's observable end state.
 # Exit 0 = the stack matches what this repo claims to install.
 set -uo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1
 STACK_ROOT="$PWD"
 . lib/common.sh
 [ -f .env ] && load_env

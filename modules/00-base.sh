@@ -22,7 +22,7 @@ apt-get install -y -qq \
 
 # GitHub CLI from its own apt repo (the agents drive releases and projects with it).
 if ! have gh; then
-  mkdir -p -m 755 /etc/apt/keyrings
+  install -d -m 755 /etc/apt/keyrings
   wget -nv -O /etc/apt/keyrings/githubcli-archive-keyring.gpg https://cli.github.com/packages/githubcli-archive-keyring.gpg
   chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \

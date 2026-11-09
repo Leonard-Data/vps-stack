@@ -10,3 +10,6 @@ ov.conf
 # leave logs here.
 *.log
 node_modules/
+
+# Archify delivery receipts — evidence for a run, reproduced by `finalize`.
+docs/architecture*.json
