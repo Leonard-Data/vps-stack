@@ -1,0 +1,28 @@
+services:
+  niner-router:
+    image: ghcr.io/decolua/9router:latest
+    restart: unless-stopped
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      INITIAL_PASSWORD: ${INITIAL_PASSWORD}
+      API_KEY_SECRET: ${API_KEY_SECRET}
+      MACHINE_ID_SALT: ${MACHINE_ID_SALT}
+      NODE_ENV: production
+      AUTH_COOKIE_SECURE: true
+      BASE_URL: https://${COMPOSE_PROJECT_NAME}.${TRAEFIK_HOST}
+      NEXT_PUBLIC_BASE_URL: https://${COMPOSE_PROJECT_NAME}.${TRAEFIK_HOST}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${COMPOSE_PROJECT_NAME}.${TRAEFIK_HOST}`)
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.entrypoints=websecure
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver=letsencrypt
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=20128
+    ports:
+      - "20128"
+    volumes:
+      - data:/app/data
+      - usage-data:/root/.9router
+
+volumes:
+  data:
+  usage-data:

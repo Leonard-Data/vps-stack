@@ -1,0 +1,39 @@
+name: openviking
+
+# OpenViking memory server for the DeepSeek Harness.
+#
+# The API is published on the host loopback only: the harness process (memory
+# plugin + viewer) is the only client. Nothing here is reachable from the
+# network, regardless of how the Web UI is accessed (SSH forward, Tailscale,
+# reverse proxy).
+#
+# - openviking  : the memory/context server, config in ./ov.conf
+# - ollama      : local embedding model server (nomic-embed-text), no API key
+# - extraction : the vlm block in ov.conf calls the host's 9router proxy
+#                (host.docker.internal:32768) for memory extraction
+services:
+  openviking:
+    image: ghcr.io/volcengine/openviking:latest
+    container_name: openviking
+    restart: unless-stopped
+    command: ["--without-bot"]
+    ports:
+      - "127.0.0.1:1933:1933"
+    volumes:
+      - ./ov.conf:/app/.openviking/ov.conf:ro
+      - openviking-data:/app/.openviking/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: openviking-ollama
+    restart: unless-stopped
+    volumes:
+      - ollama-data:/root/.ollama
+
+volumes:
+  openviking-data:
+  ollama-data:

@@ -1,0 +1,167 @@
+# Rendered by scripts/render-env.mjs from the root .env — do not edit in place.
+# The dsh profile patch layer: id-targeted config overrides applied after every
+# bundle layer. This is the harness's real configuration — the LLM providers it
+# offers, the default model, the vision router and the speech provider — so it
+# is tracked here rather than reconstructed by hand on a rebuilt host.
+- id: ui-settings-general
+  name: "@deepseek-ai/dsh-client-ui-settings-general"
+  config:
+    welcomeNoticeVersion: 2026-09-28.1
+- id: plugin-market
+  name: "@deepseek-ai/dsh-plugin-market"
+  config:
+    indexes:
+      - https://cdn.jsdelivr.net/npm/dsh-plugin-catalog/index.json
+- id: speech-to-text
+  name: "@deepseek-ai/dsh-experimental-speech-to-text"
+  config:
+    defaultProvider: sensevoice-local
+    language: en
+- id: llm-pi-ai
+  config:
+    providers:
+      9router:
+        displayName: 9router
+        api: openai-completions
+        baseURL: http://localhost:${NINEROUTER_PORT}/v1
+        apiKeyEnv: NINEROUTER_API_KEY
+        models:
+          - id: always-on
+          - id: ds/deepseek-v4-pro
+          - id: ds/deepseek-v4-pro-max
+          - id: ds/deepseek-v4-pro-none
+          - id: ds/deepseek-v4.1-flash
+          - id: ds/deepseek-v4-flash
+          - id: ds/deepseek-v4-flash-vision-exp
+          - id: ds/deepseek-chat
+          - id: ds/deepseek-reasoner
+          - id: ocg/deepseek-flash
+          - id: ocg/glm-5.3-flash
+          - id: ocg/glm-5.3
+          - id: ocg/glm-5.2
+          - id: ocg/glm-5.1
+          - id: ocg/glm-5
+          - id: ocg/kimi-k2.7-code
+          - id: ocg/kimi-k2.6
+          - id: ocg/kimi-k2.5
+          - id: ocg/kimi-k3
+          - id: ocg/kimi-k3.1-pro
+          - id: ocg/deepseek-v4-pro
+          - id: ocg/deepseek-v4-flash
+          - id: ocg/deepseek-v4-flash-vision-exp
+          - id: ocg/deepseek-v4.1-flash
+          - id: ocg/longcat-2.0
+          - id: ocg/mimo-v2.6-flash
+          - id: ocg/mimo-v2.6-pro
+          - id: ocg/mimo-v2.5
+          - id: ocg/mimo-v2.5-pro
+          - id: ocg/mimo-v2-pro
+          - id: ocg/mimo-v2-omni
+          - id: ocg/minimax-m3
+          - id: ocg/minimax-m2.7
+          - id: ocg/minimax-m2.5
+          - id: ocg/space-bunny-free
+          - id: ocg/qwen3.8-max
+          - id: ocg/qwen3.8-flash
+          - id: ocg/qwen3.7-max
+          - id: ocg/qwen3.7-plus
+          - id: ocg/qwen3.6-plus
+          - id: ocg/qwen3.5-plus
+          - id: ocg/hy4-preview
+          - id: ocg/hy3
+          - id: ocg/hy3-preview
+          - id: ocg/omen-alpha
+          - id: ocg/grok-4.7
+          - id: ocg/grok-4.6
+          - id: ocg/grok-4.5
+          - id: ocg/gpt-5.6-luna
+          - id: ocg/gpt-6-luna
+          - id: ocg/muse-spark-1.2-contributor
+          - id: ocg/muse-spark-1.3-contributor
+          - id: ocg/claude-haiku-5-5
+          - id: cx/gpt-6.1-sol
+          - id: cx/gpt-6.1-terra
+          - id: cx/gpt-6-astra
+          - id: cx/gpt-6-astra[1m]
+          - id: cx/gpt-6-sol
+          - id: cx/gpt-6-sol[1m]
+          - id: cx/gpt-6-luna
+          - id: cx/gpt-6-luna[1m]
+          - id: cx/gpt-5.6-sol
+          - id: cx/gpt-5.6-sol[1m]
+          - id: cx/gpt-5.6-sol-review
+          - id: cx/gpt-5.6-terra
+          - id: cx/gpt-5.6-terra[1m]
+          - id: cx/gpt-5.6-terra-review
+          - id: cx/gpt-5.6-luna
+          - id: cx/gpt-5.6-luna[1m]
+          - id: cx/gpt-5.6-luna-review
+          - id: cx/gpt-daybreak-blue-latest
+          - id: cx/gpt-reserve
+          - id: cx/codex-auto-review
+          - id: cc/claude-opus-5-5
+          - id: cc/claude-opus-5
+          - id: cc/claude-fable-5-1
+          - id: cc/claude-fable-5
+          - id: cc/claude-sonnet-5-5
+          - id: cc/claude-sonnet-5
+          - id: cc/claude-haiku-4-5-20251001
+          - id: openrouter/typesafe/jev-1.13
+          - id: nvidia/minimaxai/minimax-m2.7
+          - id: nvidia/minimaxai/minimax-m3
+          - id: nvidia/z-ai/glm-5.2
+          - id: nvidia/deepseek-ai/deepseek-v4-pro
+          - id: nvidia/deepseek-ai/deepseek-v4-flash
+          - id: nvidia/moonshotai/kimi-k2.6
+          - id: nvidia/nemotron-3-ultra-550b-a55b
+          - id: nvidia/parakeet-ctc-1.1b-asr
+          - id: bpm/seed-2-0-pro-260328
+          - id: bpm/seed-2-0-code-preview-260328
+          - id: bpm/seed-2-0-mini-260215
+          - id: bpm/seed-2-0-lite-260228
+          - id: bpm/kimi-k2-thinking-251104
+          - id: bpm/glm-4-7-251222
+          - id: bpm/gpt-oss-120b-250805
+          - id: mmf/mimo-auto
+          - id: oc/muse-spark-1.2-contributor-free
+          - id: oc/muse-spark-1.3-contributor-free
+          - id: oc/union-alpha
+          - id: oc/jev-1.13-free
+          - id: oc/big-pickle
+          - id: oc/deepseek-v4.1-flash-free
+          - id: vibe-free
+          - id: code-max
+          - id: code-fast
+          - id: cheap-fast
+          - id: reason-deep
+          - id: vision
+          - id: long-ctx
+          - id: review
+          - id: writing
+          - id: agentic
+          - id: regular
+- id: vision-router
+  name: dsh-vision-router
+  config:
+    progressiveTools: false
+    onboardingSeen: true
+    routingMode: auto
+    routingPreference: quality
+    backgroundBenchmarking: off
+    providers:
+      - provider: 9router
+        model: vision
+        fallbacks: []
+      - provider: vision-http
+        model: ovh/Qwen3.5-397B-A17B
+        fallbacks: []
+    allowRemoteSettings: true
+- id: dsh-context
+  name: dsh-context
+  config:
+    defaultOverviewRange: today
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: 9router
+    model: always-on

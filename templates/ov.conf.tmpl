@@ -1,0 +1,28 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": ${OPENVIKING_PORT},
+    "root_api_key": "${OPENVIKING_ROOT_API_KEY}"
+  },
+  "storage": {
+    "workspace": "/app/.openviking/data",
+    "vectordb": { "name": "context", "backend": "local" },
+    "agfs": { "backend": "local" }
+  },
+  "embedding": {
+    "dense": {
+      "provider": "ollama",
+      "api_base": "http://ollama:11434/v1",
+      "api_key": "ollama",
+      "model": "${OPENVIKING_EMBED_MODEL}",
+      "dimension": ${OPENVIKING_EMBED_DIM},
+      "input": "text"
+    }
+  },
+  "vlm": {
+    "provider": "openai",
+    "api_base": "http://host.docker.internal:${NINEROUTER_PORT}/v1",
+    "api_key": "${NINEROUTER_API_KEY}",
+    "model": "${OPENVIKING_EXTRACTION_MODEL}"
+  }
+}

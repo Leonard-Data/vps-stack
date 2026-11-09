@@ -1,0 +1,12 @@
+# The single source of truth for every secret on the host. Never committed.
+.env
+.env.local
+
+# Rendered artifacts — reproduced by scripts/render-env.mjs, never by hand.
+ov.conf
+/docker/
+
+# Module completion markers live in /var/lib/vps-stack, but a local run may
+# leave logs here.
+*.log
+node_modules/

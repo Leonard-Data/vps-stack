@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The installer is the deliverable, so the checks are: it parses, it is
+      # lint-clean, its own test passes, and no secret ever lands in the repo.
+      - name: shell syntax
+        run: |
+          set -euo pipefail
+          for f in install.sh lib/*.sh modules/*.sh scripts/*.sh; do
+            bash -n "$f"
+          done
+
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck -x -S warning install.sh lib/*.sh modules/*.sh scripts/*.sh
+
+      - name: self-check (renderer + module/template invariants)
+        run: node scripts/self-check.mjs
+
+      - name: compose files are valid
+        run: |
+          set -euo pipefail
+          for d in apps/*/; do
+            docker compose -f "$d/docker-compose.yml" config --quiet \
+              || { echo "invalid: $d" >&2; exit 1; }
+          done
+        env:
+          # Compose interpolates these; the real values come from the rendered
+          # per-app env files at install time.
+          COMPOSE_PROJECT_NAME: ci
+          TRAEFIK_HOST: ci.invalid
+          ACME_EMAIL: ci@ci.invalid
+          JWT_SECRET: ci
+          INITIAL_PASSWORD: ci
+          API_KEY_SECRET: ci
+          MACHINE_ID_SALT: ci
+
+      - name: no .env or rendered secret is committed
+        run: |
+          set -euo pipefail
+          for f in .env ov.conf; do
+            if git ls-files --error-unmatch "$f" 2>/dev/null; then
+              echo "$f holds secrets and must stay untracked." >&2
+              exit 1
+            fi
+          done
+          echo "no secret files tracked, as required."
+
+      - name: installer dry run resolves every module
+        run: |
+          set -euo pipefail
+          test "$(./install.sh --list | wc -l)" -eq "$(ls modules/*.sh | wc -l)"
