@@ -9,7 +9,7 @@
     "repository": {
       "url": "https://github.com/Leonard-Data/vps-stack",
       "provider": "github",
-      "revision": "f314730f60ff34c05b9b60de2aca553ae0872e0a"
+      "revision": "63bd4db744df0df4cacda6714dd331609d7a6b06"
     }
   },
   "components": [
